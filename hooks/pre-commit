@@ -1,0 +1,9 @@
+#!/bin/bash
+STAGED=$(git diff --cached --name-only) #obtiene los archivos que estan preparados para el commit
+
+for file in $STAGED; do
+    if [[ ! $file =~ \.(py|sh|tf|tfvars|md|svg|txt)$ && $file == *.* ]]; then #verifica que los archivos tengan una extension permitida
+        echo "Solo se permiten archivos .py, .sh, .tf, .tfvars, .md, .svg .txt: $file"
+        exit 1
+    fi
+done
