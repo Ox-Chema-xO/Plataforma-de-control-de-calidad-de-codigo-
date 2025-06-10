@@ -27,3 +27,23 @@ def separar_lista(lista: list, condicion):
         else:
             lista_no_cumplen.append(elemento)
     return lista_cumplen, lista_no_cumplen
+
+def agrupar_por_extension(lista_archivos: list):
+    """
+    Agrupar lista de archivos python, terraform,
+    por su extension, entre otros 
+    """ 
+    if(not isinstance(lista_archivos, list) or 
+       not all(isinstance(x, str) for x in lista_archivos)
+    ):
+        raise ValueError("Se requiere una lista de nombres de archivos(str)")      
+    grupos = {}
+    for archivo in lista_archivos:
+        if "." in archivo:
+            extension = archivo[archivo.rfind("."):]
+        else:
+            extension = "" 
+        if extension not in grupos:
+            grupos[extension] = []
+        grupos[extension].append(archivo)
+    return grupos   

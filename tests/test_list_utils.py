@@ -1,6 +1,7 @@
 import pytest
 from src.utils.list_utils import aplanar_lista
 from src.utils.list_utils import separar_lista
+from src.utils.list_utils import agrupar_por_extension
 
 def test_aplanar_lista_basica():
     lista = [5,[10,15],[20,[25,30]],35]
@@ -54,3 +55,13 @@ def test_separar_pruebas_exitosas_fallidas():
     )
     assert len(tests_exitosos) == 3
     assert len(tests_fallidos) == 1
+
+def test_agrupar_por_extension_archivos():
+    archivos = ["list_utils.py","Makefile","variables.tf","main.py"]
+    archivos_agrupados = agrupar_por_extension(archivos)
+    archivos_esperados_agrupados = {
+        ".tf":["variables.tf"],
+        ".py":["list_utils.py", "main.py"],
+        "":["Makefile"]
+    }
+    assert archivos_agrupados == archivos_esperados_agrupados
