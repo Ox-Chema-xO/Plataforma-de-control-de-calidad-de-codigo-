@@ -25,3 +25,8 @@ def test_eliminar_duplicados_con_lista_archivos_anidados():
     with pytest.raises(ValueError):
         list_utils.eliminar_duplicados(["module/compute/main.tf",
                                         ["module/dev/main.tf"]])
+
+
+def test_filtrar_por_patron_con_lista_invalida():
+    with pytest.raises(ValueError):
+        list_utils.filtrar_por_patron(["main.tf", 738, None], r"\.tf$")

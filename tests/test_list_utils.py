@@ -79,3 +79,11 @@ def test_eliminar_duplicados_archivos():
     ]
     archivos_sin_duplicar = list_utils.eliminar_duplicados(archivos)
     assert len(archivos_sin_duplicar) == 3
+
+
+def test_filtrar_por_patron_archivos():
+    archivos = ["list_utils.py", "Makefile",
+                "variables.tf", "main.py"]
+    archivos_filtrados = list_utils.filtrar_por_patron(archivos, r"\.tf$")
+    archivos_esperados_filtrados = ["variables.tf"]
+    assert archivos_filtrados == archivos_esperados_filtrados

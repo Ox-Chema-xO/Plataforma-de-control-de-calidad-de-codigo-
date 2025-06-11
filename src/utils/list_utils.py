@@ -1,3 +1,6 @@
+import re
+
+
 def aplanar_lista(lista: list):
     """
     Se aplana una lista para cuando necesitemos
@@ -71,3 +74,22 @@ def eliminar_duplicados(lista: list):
         return lista_sin_duplicados
     except TypeError:
         raise ValueError("Los elementos deben ser hashables")
+
+
+def filtrar_por_patron(lista: list, patron: str, sensible_mayus: bool = True):
+    """
+    Filtramos mediante un patron nuestra lista de archivos python,
+    terraform, pruebas unitarias de integracion, entre otros
+    """
+    if (
+        not isinstance(lista, list) or
+        not all(isinstance(x, str) for x in lista)
+    ):
+        raise ValueError("Se requiere una lista (str)")
+    flag = 0 if sensible_mayus else re.IGNORECASE
+    patron_compilado = re.compile(patron, flag)
+    lista_filtrada = []
+    for elemento in lista:
+        if patron_compilado.search(elemento):
+            lista_filtrada.append(elemento)
+    return lista_filtrada
