@@ -50,3 +50,24 @@ def agrupar_por_extension(lista_archivos: list):
             grupos[extension] = []
         grupos[extension].append(archivo)
     return grupos
+
+
+def eliminar_duplicados(lista: list):
+    """
+    Se elimina elementos duplicados preservando el orden cuando
+    por error se repite test u archivos, entre otros
+    """
+    if (
+        not isinstance(lista, list)
+    ):
+        raise ValueError("Se requiere una lista")
+    try:
+        lista_sin_duplicados = []
+        conjunto = set()
+        for elemento in lista:
+            if elemento not in conjunto:
+                conjunto.add(elemento)
+                lista_sin_duplicados.append(elemento)
+        return lista_sin_duplicados
+    except TypeError:
+        raise ValueError("Los elementos deben ser hashables")

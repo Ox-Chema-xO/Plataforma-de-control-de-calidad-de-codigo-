@@ -19,3 +19,9 @@ def test_separar_lista_con_none():
 def test_agrupar_por_extension_con_lista_invalida():
     with pytest.raises(ValueError):
         list_utils.agrupar_por_extension(["lists.py", 738, None])
+
+
+def test_eliminar_duplicados_con_lista_archivos_anidados():
+    with pytest.raises(ValueError):
+        list_utils.eliminar_duplicados(["module/compute/main.tf",
+                                        ["module/dev/main.tf"]])

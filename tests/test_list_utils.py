@@ -69,3 +69,13 @@ def test_agrupar_por_extension_archivos():
         "": ["Makefile"]
     }
     assert archivos_agrupados == archivos_esperados_agrupados
+
+
+def test_eliminar_duplicados_archivos():
+    archivos = [
+        "module/network/main.tf", "module/compute/main.tf",
+        "module/network/main.tf", "module/dev/variables.tf",
+        "module/compute/main.tf",
+    ]
+    archivos_sin_duplicar = list_utils.eliminar_duplicados(archivos)
+    assert len(archivos_sin_duplicar) == 3
