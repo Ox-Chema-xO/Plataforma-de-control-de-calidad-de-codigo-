@@ -87,3 +87,22 @@ def test_filtrar_por_patron_archivos():
     archivos_filtrados = list_utils.filtrar_por_patron(archivos, r"\.tf$")
     archivos_esperados_filtrados = ["variables.tf"]
     assert archivos_filtrados == archivos_esperados_filtrados
+
+
+def test_ordenar_por_criterio_pruebas():
+    test_results = [
+        {"nombre": "test_module_network", "tipo": "integration"},
+        {"nombre": "test_separar_lista_archivos_py", "tipo": "unit"},
+        {"nombre": "test_aplanar_lista_basica", "tipo": "unit"},
+    ]
+    prioridad = {"unit": 0, "integration": 1}
+    test_results_ordenadas = list_utils.ordenar_por_criterio(
+        test_results,
+        lambda t: prioridad.get(t["tipo"], 2)
+    )
+    test_results_esperadas_ordenadas = [
+        {"nombre": "test_separar_lista_archivos_py", "tipo": "unit"},
+        {"nombre": "test_aplanar_lista_basica", "tipo": "unit"},
+        {"nombre": "test_module_network", "tipo": "integration"},
+    ]
+    assert test_results_ordenadas == test_results_esperadas_ordenadas

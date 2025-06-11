@@ -93,3 +93,15 @@ def filtrar_por_patron(lista: list, patron: str, sensible_mayus: bool = True):
         if patron_compilado.search(elemento):
             lista_filtrada.append(elemento)
     return lista_filtrada
+
+
+def ordenar_por_criterio(lista: list, criterio, descendente: bool = False):
+    """
+    Ordenar mediante un criterio listas de pruebas que tengan
+    mayor prioridad o sean necesarios antes que otras pruebas
+    u ordenar ciertos archivos, entre otros
+    """
+    if not isinstance(lista, list):
+        raise ValueError("Se requiere una lista")
+    lista_ordenada = sorted(lista, key=criterio, reverse=descendente)
+    return lista_ordenada

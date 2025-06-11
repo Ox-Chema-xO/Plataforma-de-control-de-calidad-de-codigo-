@@ -30,3 +30,9 @@ def test_eliminar_duplicados_con_lista_archivos_anidados():
 def test_filtrar_por_patron_con_lista_invalida():
     with pytest.raises(ValueError):
         list_utils.filtrar_por_patron(["main.tf", 738, None], r"\.tf$")
+
+
+def test_ordenar_por_criterio_lista_invalida():
+    with pytest.raises(ValueError):
+        list_utils.ordenar_por_criterio("test_unit", "test_integration",
+                                        lambda t: t)
