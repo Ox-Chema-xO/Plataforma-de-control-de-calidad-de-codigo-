@@ -2,7 +2,7 @@ import os
 from src.logs.registrador_logs import RegistradorLogs
 
 
-def test_registrador_logs_crea_directorio_logs():
+def test_registrador_logs_crea_directorio_logs(workspace):
     # arrange
     directorio_logs = "./logs"
     registrador = RegistradorLogs()
@@ -13,11 +13,8 @@ def test_registrador_logs_crea_directorio_logs():
     # assert
     assert os.path.exists(directorio_logs)
 
-    # limpiamos
-    os.rmdir(directorio_logs)
 
-
-def test_registrador_logs_guarda_flake8():
+def test_registrador_logs_guarda_flake8(workspace):
     # arrange
     archivo_log = "logs/flake8.log"
     registrador = RegistradorLogs()
@@ -37,12 +34,8 @@ def test_registrador_logs_guarda_flake8():
         assert "Flake8:" in contenido
         assert salida_flake8 in contenido
 
-    # limpiamos
-    os.remove(archivo_log)
-    os.rmdir("./logs")
 
-
-def test_registrar_logs_guardar_pytest():
+def test_registrar_logs_guardar_pytest(workspace):
     registrador = RegistradorLogs()
     registrador.registrar_resultados_pytest(5, 4, 1)
 
@@ -54,11 +47,8 @@ def test_registrar_logs_guardar_pytest():
         assert "Aprobadas: 4" in contenido
         assert "Fallidas: 1" in contenido
 
-    os.remove("logs/pytest.log")
-    os.rmdir("./logs")
 
-
-def test_registrar_logs_guardar_shellcheck():
+def test_registrar_logs_guardar_shellcheck(workspace):
     registrador = RegistradorLogs()
     linea = "In script.sh line 1: echo $1"
     tipo_error = "SC2086: Double quote to prevent globbing and word splitting"
@@ -70,6 +60,3 @@ def test_registrar_logs_guardar_shellcheck():
     with open("./logs/shellcheck.log", 'r') as contenido_shellcheck:
         contenido = contenido_shellcheck.read()
         assert "SC2086" in contenido
-
-    os.remove("logs/shellcheck.log")
-    os.rmdir("./logs")
