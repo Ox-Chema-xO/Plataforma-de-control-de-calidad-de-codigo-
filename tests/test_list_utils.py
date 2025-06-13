@@ -1,3 +1,4 @@
+import pytest
 import src.utils.list_utils as list_utils
 
 
@@ -30,6 +31,22 @@ def test_aplanar_lista_de_pruebas():
 
     assert test_results_plana == test_esperado_results_plana
     assert len(test_results_plana) == 4
+
+
+@pytest.mark.parametrize("lista_original, lista_esperada", [
+    ([1, 2, 3, 4, 5], [1, 2, 3, 4, 5]),
+    ([1, [2, 3], 4, []], [1, 2, 3, 4]),
+    ([1, [2, [3, 4]], 5], [1, 2, 3, 4, 5]),
+    (["main.tf", ["variables.tf", "outputs.tf"]],
+     ["main.tf", "variables.tf", "outputs.tf"]),
+    ([{"test": "unit"}, [{"test": "integration"}]],
+     [{"test": "unit"}, {"test": "integration"}]),
+    (["test1.py", "test2.py"], ["test1.py", "test2.py"])
+])
+def test_aplanar_varias_listas(lista_original, lista_esperada):
+    lista_aplanada = list_utils.aplanar_lista(lista_original)
+    assert lista_aplanada == lista_esperada
+    assert len(lista_aplanada) == len(lista_esperada)
 
 
 def test_separar_lista_archivos_py():
