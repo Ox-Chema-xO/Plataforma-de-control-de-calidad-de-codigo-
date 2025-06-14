@@ -2,6 +2,7 @@ coverage==7.8.0
 exceptiongroup==1.2.2
 flake8==7.2.0
 iniconfig==2.1.0
+lark==1.2.2
 mccabe==0.7.0
 packaging==25.0
 parse==1.20.2
@@ -11,5 +12,6 @@ pycodestyle==2.13.0
 pyflakes==3.3.2
 pytest==8.3.5
 pytest-cov==6.1.1
+python-hcl2==7.2.1
 six==1.17.0
 tomli==2.2.1
