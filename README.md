@@ -84,7 +84,7 @@ $ ./scripts/setup.sh
 
 ## Estructura del proyecto
 
-
+```
 Plataforma-de-control-de-calidad-de-codigo/
 │
 ├── hooks/
@@ -122,7 +122,7 @@ Plataforma-de-control-de-calidad-de-codigo/
 │   │
 │   └── utils/
 │       ├── __init__.py
-|				├── list_utils.py
+|		├── list_utils.py
 │       └── string_utils.py
 │
 ├── tests/
@@ -140,7 +140,7 @@ Plataforma-de-control-de-calidad-de-codigo/
 ├── coverage.xml
 ├── README.md
 └── requirements.txt
-
+```
 
 ## Modulos
 
@@ -148,20 +148,20 @@ Plataforma-de-control-de-calidad-de-codigo/
 
 En src/ se ha organizado el proyecto en cuatro carpetas principales:
 
-- *utils/*
-    - list_utils.py: Funciones genéricas para manejar listas como listas anidadas, filtrado, agrupación por extensión, eliminación de duplicados, ordenación, usadas para procesar resultados de código Python, Terraform y pruebas.
-    - string_utils.py: Funciones genericas para manejar cadenas, como limpiar cadenas, extraer métricas de salida y estructurar texto para dashboards y reportes.
-- *helpers/*
+- **utils/**
+    - `list_utils.py`: Funciones genéricas para manejar listas como listas anidadas, filtrado, agrupación por extensión, eliminación de duplicados, ordenación, usadas para procesar resultados de código Python, Terraform y pruebas.
+    - `string_utils.py`: Funciones genericas para manejar cadenas, como limpiar cadenas, extraer métricas de salida y estructurar texto para dashboards y reportes.
+- **helpers/**
     
     Clases GestorArchivos y GestorDirectorios que abstraen las operaciones de creación, lectura/escritura y mantenimiento de la estructura de ficheros y carpetas que requiere el sistema.
     
-- *logs/*
+- **logs/**
     
-    registrador_logs.py: Implementa un logger centralizado que persiste eventos y resultados de las herramientas de QA con marcas temporales precisas.
+    `registrador_logs.py`: Implementa un logger centralizado que persiste eventos y resultados de las herramientas de QA con marcas temporales precisas.
     
-- *reporting/*
+- **reporting/**
     
-    reportador.py: Lee los logs generados, los transforma y formatea en documentos fáciles de supervisar.
+    `reportador.py`: Lee los logs generados, los transforma y formatea en documentos fáciles de supervisar.
     
 
 ### iac/
@@ -182,23 +182,23 @@ Ademas se incluye conftest para agregar una fixture global que preparar un entor
 
 Se crearon 2 bash scripts:
 
-- *lint_qa.sh:* Analiza el codigo con linters como flake8, shellcheck y terraform fmt -check. Para ejecutar este bash script hay que seguir los siguientes pasos:
+- **lint_qa.sh:** Analiza el codigo con linters como flake8, shellcheck y terraform fmt -check. Para ejecutar este bash script hay que seguir los siguientes pasos:
     
-    bash
+```bash
     # dar permisos de ejecucion
     $ chmod +x scripts/setup.sh
     # ejecutar el bash script
     $ ./scripts/lint_qa.sh
+``` 
     
+- **run_tests.sh:** Ejecuta todo los test y para ejecutar este bash script hay que seguir los siguientes pasos:
     
-- *run_tests.sh:* Ejecuta todo los test y para ejecutar este bash script hay que seguir los siguientes pasos:
-    
-    bash
+```bash
     # dar permisos de ejecucion
     $ chmod +x scripts/setup.sh
     # ejecutar el bash script
     $ ./scripts/run_tests.sh
-    
+```
     
 
 ## Flujo de Trabajo
@@ -211,10 +211,10 @@ En este Sprint delegamos issues parte del sprint 1 a cada integrante
 
 Para cada issue se agregaron los siguientes fields:
 
-- *Puntos:* Nivel de importancia de la issue en un rango de 1-5
-- *Horas estimadas:* Tiempo estimado para completar la issue
-- *Horas reales:* Tiempo real invertido al completar la issue
-- *Sprint:* Sprint al que pertenece
+- **Puntos:** Nivel de importancia de la issue en un rango de 1-5
+- **Horas estimadas:** Tiempo estimado para completar la issue
+- **Horas reales:** Tiempo real invertido al completar la issue
+- **Sprint:** Sprint al que pertenece
 
 Por ejemplo esta son los fields de la issue #2 Crear funciones genericas para manejo de listas:
 
