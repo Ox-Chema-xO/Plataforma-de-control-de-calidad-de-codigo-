@@ -82,7 +82,7 @@ $ ./scripts/setup.sh
 
 ## Sprint 1
 
-## Estructura del proyecto
+### Estructura del proyecto
 
 ```
 Plataforma-de-control-de-calidad-de-codigo/
@@ -122,7 +122,7 @@ Plataforma-de-control-de-calidad-de-codigo/
 │   │
 │   └── utils/
 │       ├── __init__.py
-|		├── list_utils.py
+|       ├── list_utils.py
 │       └── string_utils.py
 │
 ├── tests/
@@ -142,9 +142,9 @@ Plataforma-de-control-de-calidad-de-codigo/
 └── requirements.txt
 ```
 
-## Modulos
+### Modulos
 
-### src/
+#### src/
 
 En src/ se ha organizado el proyecto en cuatro carpetas principales:
 
@@ -164,21 +164,21 @@ En src/ se ha organizado el proyecto en cuatro carpetas principales:
     `reportador.py`: Lee los logs generados, los transforma y formatea en documentos fáciles de supervisar.
     
 
-### iac/
+#### iac/
 
 En iac/ se creo un módulo terraform mínimo main.tf que contiene un recurso null_resource y  una variable para nuestra infraestructura local.
 
-### iac_tests/
+#### iac_tests/
 
 Se realizo una prueba unitaria para validar sintaxis del archivo main.tf de iac/
 
-### tests/
+#### tests/
 
 Se realizaron pruebas unitarias para casos positivos y de excepcion que nos permitio validar el correcto funcionamiento de las funciones genericas de utils, las clases base de helpers/, logs/, reporting/ y asi como tambien nuestra infraestructura en iac/
 
 Ademas se incluye conftest para agregar una fixture global que preparar un entorno temporal para que ejecutar determinadas pruebas que requieran de un entorno limpio y aislado.
 
-### scripts/
+#### scripts/
 
 Se crearon 2 bash scripts:
 
@@ -201,7 +201,7 @@ Se crearon 2 bash scripts:
 ```
     
 
-## Flujo de Trabajo
+### Flujo de Trabajo
 
 En este Sprint delegamos issues parte del sprint 1 a cada integrante
 
@@ -225,19 +225,19 @@ Por ejemplo esta son los fields de la issue #2 Crear funciones genericas para ma
 El kanban board inicial para el sprint 1, en donde todas las issues estan en Sprint Backlog
 
    <div align="center">
-      <img src="https://i.postimg.cc/nz6jxy9w/image-3.png" alt="image3" width="900" />
+      <img src="https://i.postimg.cc/nz6jxy9w/image-3.png" alt="image3" width="1000" />
    </div>
 
 Se comenzo completando la Issue #2, #3, #6 por lo que estas issues se movieron a la columna In progress
 
    <div align="center">
-      <img src="https://i.postimg.cc/qRth9Jq3/image-4.png" alt="image4" width="900" />
+      <img src="https://i.postimg.cc/qRth9Jq3/image-4.png" alt="image4" width="1000" />
    </div>
 
 Al terminar la issue, esta se movieron a la columna Review/QA en donde los otros desarrolladores revisaron los cambios si estan bien implementados
 
    <div align="center">
-      <img src="https://i.postimg.cc/1Xwg3vpR/image-5.png" alt="image5" width="900" />
+      <img src="https://i.postimg.cc/1Xwg3vpR/image-5.png" alt="image5" width="1000" />
    </div>
 
 El desarrollador encargado de la issue envia una Pull Request desde la rama que trabajo a la rama develop en donde se solicita la revision de los cambios y si estan conformes con los cambios o nuevas implementaciones hechas 
@@ -255,26 +255,31 @@ Los otros desarrolladores revisan el PR y envian un mensaje de confirmacion en d
 Cuando los otros desarrolladores aceptaron los cambios hechos, el desarrollador encargado de la issue le asigna las horas reales que le tomo completar esta issue y se mueve a la columna Done
 
    <div align="center">
-      <img src="https://i.postimg.cc/02GMgHkc/image-8.png" alt="image8" width="900" />
+      <img src="https://i.postimg.cc/02GMgHkc/image-8.png" alt="image8" width="1000" />
    </div>
 
 Conforme se va avanzando el proceso se va actualizando el tablero hasta que todas las issues del sprint 1 llegan a la columna Done
 
    <div align="center">
-      <img src="https://i.postimg.cc/kgnV7FD9/image-9.png" alt="image9" width="900" />
+      <img src="https://i.postimg.cc/kgnV7FD9/image-9.png" alt="image9" width="1000" />
    </div>
 
-## Historial y ramas
+### Historial y ramas
 Durante todo el desarrollo del sprint 1 creamos estas ramas:
 
    <div align="center">
-      <img src="https://i.postimg.cc/7hw4S9FZ/imagen10.png" alt="image10" width="600" />
+      <img src="https://i.postimg.cc/7hw4S9FZ/imagen10.png" alt="image10" width="700" />
    </div>
 
 Y el historial de commits durante todo el desarrollo del sprint 1 fue el siguiente:
 
    <div align="center">
-      <img src="https://i.postimg.cc/Fzp4pcvg/imagen11.png" alt="image11" width="800" />
+      <img src="https://i.postimg.cc/Fzp4pcvg/imagen11.png" alt="image11" width="900" />
    </div>
 
 Durante el desarrollo del Sprint 1 cada desarrollador trabajo cada issue asignada en ramas diferentes en paralelo, al terminar todas las issues y tener todo los cambios en la rama develop, nace otra rama release desde develop en donde se agrega la documentacion correspondiente al sprint 1, asi aplicando correctamente las politicas de Git Flow
+
+## Videos
+Se referencia el link de los video de cada cada Sprint hecho:
+
+- **Sprint 1**: https://unipe-my.sharepoint.com/:v:/g/personal/guido_chipana_c_uni_pe/EVUE_SK1IBZHuLs1czTY_pIBxpEpdmKeIMkNz2c_hSwtyA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=vZLDGc
