@@ -8,3 +8,4 @@ badges/
 .terraform/
 terraform.tfstate*
 *.tfvars
+.terraform.lock.hcl
