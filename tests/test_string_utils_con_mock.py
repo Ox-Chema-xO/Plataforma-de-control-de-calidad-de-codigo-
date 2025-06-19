@@ -1,10 +1,12 @@
 import pytest
-from unittest.mock import patch, Mock
+from unittest.mock import patch, Mock, create_autospec
 import re
 import os
 from src.utils.string_utils import (
     extraer_metricas_de_output,
-    parsear_ruta_archivo
+    parsear_ruta_archivo,
+    normalizar_output_comando,
+    procesar_salida_herramienta
 )
 
 
@@ -56,3 +58,21 @@ class TestParsearRutaConMock:
         with pytest.raises(OSError):
             parsear_ruta_archivo("/ruta/erronea")
         mock_normpath.assert_called_once()
+
+
+class TestProcesarSalidaHerramientaConMock:
+    def test_procesar_salida_con_autospec(self):
+        mock_extraer = create_autospec(extraer_metricas_de_output)
+        mock_extraer.return_value = {'warnings': 5}
+        mock_normalizar = create_autospec(normalizar_output_comando)
+        mock_normalizar.return_value = "clean output"
+        with patch('src.utils.string_utils.extraer_metricas_de_output',
+                   new=mock_extraer):
+            with patch('src.utils.string_utils.normalizar_output_comando',
+                       new=mock_normalizar):
+                resultado = procesar_salida_herramienta("5 warnings found",
+                                                        "flake8")
+                assert resultado['herramienta'] == 'flake8'
+                assert resultado['estado'] == 'warning'
+                assert resultado['metricas'] == {'warnings': 5}
+                assert resultado['salida_limpia'] == "clean output"
