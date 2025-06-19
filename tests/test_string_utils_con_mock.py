@@ -3,6 +3,7 @@ from unittest.mock import patch, Mock, create_autospec
 import re
 import os
 import platform
+import sys
 from src.utils.string_utils import (
     extraer_metricas_de_output,
     parsear_ruta_archivo,
@@ -96,15 +97,21 @@ class TestConSkip:
 
 
 class TestConXFail:
-
-    @pytest.mark.xfail(
-        platform.system() == "Windows",
-        reason="Windows limita rutas a maximo con 260 caracteres",
-        strict=False
-    )
-    def test_ruta_larga_windows(self):
-        carpeta = "r" * 250
-        ruta_larga = os.path.join("C:\\", carpeta, "archivo.py")
-        resultado = parsear_ruta_archivo(ruta_larga)
-        assert resultado['nombre_archivo'] == "archivo.py"
-        assert resultado['nivel_profundidad'] > 0
+    @pytest.mark.xfail(reason="Aun no se parsean multiples rutas con agrupacion")
+    def test_parsear_multiples_rutas_agrupadas(self):
+        rutas_proyecto = [
+            "src/utils/string_utils.py",
+            "src/utils/list_utils.py",
+            "tests/test_string_utils.py", 
+            "tests/test_list_utils.py",
+            "iac/main.tf",
+            "iac/variables.tf"
+        ]    
+        resultado = parsear_ruta_archivo(
+            rutas_proyecto,
+            criterios=['directorio_raiz', 'tipo_archivo', 'es_test']
+        )
+        assert 'src' in resultado
+        assert 'python' in resultado['src']
+        assert 'no_test' in resultado['src']['python']
+        assert len(resultado['src']['python']['no_test']) == 2
