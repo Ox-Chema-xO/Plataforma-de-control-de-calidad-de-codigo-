@@ -2,6 +2,7 @@ import pytest
 from unittest.mock import patch, Mock, create_autospec
 import re
 import os
+import platform
 from src.utils.string_utils import (
     extraer_metricas_de_output,
     parsear_ruta_archivo,
@@ -92,3 +93,18 @@ class TestConSkip:
         resultado = extraer_metricas_de_output(log_prod)
         assert resultado['errors'] == 3
         assert resultado['duration'] == 41.2
+
+
+class TestConXFail:
+
+    @pytest.mark.xfail(
+        platform.system() == "Windows",
+        reason="Windows limita rutas a maximo con 260 caracteres",
+        strict=False
+    )
+    def test_ruta_larga_windows(self):
+        carpeta = "r" * 250
+        ruta_larga = os.path.join("C:\\", carpeta, "archivo.py")
+        resultado = parsear_ruta_archivo(ruta_larga)
+        assert resultado['nombre_archivo'] == "archivo.py"
+        assert resultado['nivel_profundidad'] > 0

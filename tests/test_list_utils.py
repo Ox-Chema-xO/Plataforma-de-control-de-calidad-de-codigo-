@@ -154,3 +154,32 @@ def test_rendimiento_filtrar_patron_grandes():
     duracion = time.perf_counter() - inicio
     assert len(resultado) == 50000
     assert duracion < 5.5
+
+
+@pytest.mark.xfail(reason="Aun no se agrupa archivos por varios criterios")
+def test_agrupar_por_multiples_criterios(self):
+    archivos = [
+        "src/list_utils.py",
+        "iac/main.tf",
+        "src/logs/registrador_logs.py",
+        "tests/test_list_utils.py"
+    ]
+
+    resultado = list_utils.agrupar_por_extension(
+        archivos,
+        criterios=['directorio', 'extension']
+    )
+
+    assert 'src' in resultado
+    assert '.py' in resultado['src']
+    assert "src/list_utils.py" in resultado['src']['.py']
+    assert "src/logs/registrador_logs.py" in resultado['src']['.py']
+    assert len(resultado['src']['.py']) == 2
+
+    assert 'iac' in resultado
+    assert '.tf' in resultado['iac']
+    assert "iac/main.tf" in resultado['iac']['.tf']
+
+    assert 'tests' in resultado
+    assert '.py' in resultado['tests']
+    assert "tests/test_list_utils.py" in resultado['tests']['.py']
