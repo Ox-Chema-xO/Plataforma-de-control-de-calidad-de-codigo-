@@ -1,5 +1,7 @@
 import pytest
 import src.utils.list_utils as list_utils
+import os
+import time
 
 
 def test_aplanar_lista_basica():
@@ -138,3 +140,17 @@ def test_list_con_datos_inicializados(datos_inicializados):
     datos_inicializados["elementos"].append(2)
     datos_inicializados["elementos"].append(3)
     assert len(datos_inicializados["elementos"]) == 3
+
+
+@pytest.mark.skipif(
+    os.getenv('PERFORMANCE_TESTS') != 'enabled',
+    reason="Por el momento tests de rendimiento deshabilitados"
+)
+def test_rendimiento_filtrar_patron_grandes():
+    archivos_grandes = [f"archivo_{i}.py" for i in range(100000)]
+    archivos_grandes.extend([f"test_{i}.py" for i in range(50000)])
+    inicio = time.perf_counter()
+    resultado = list_utils.filtrar_por_patron(archivos_grandes, r"^test_")
+    duracion = time.perf_counter() - inicio
+    assert len(resultado) == 50000
+    assert duracion < 5.5
