@@ -2,7 +2,6 @@ variable "environment" {
   description = "Entorno de despliegue (dev, test, prod)"
   type        = string
   default     = "dev"
-
   validation {
     condition     = contains(["dev", "test", "prod"], var.environment)
     error_message = "El valor de environment debe ser 'dev', 'test', o 'prod'."
