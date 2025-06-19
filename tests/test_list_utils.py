@@ -123,3 +123,18 @@ def test_ordenar_por_criterio_pruebas():
         {"nombre": "test_module_network", "tipo": "integration"},
     ]
     assert test_results_ordenadas == test_results_esperadas_ordenadas
+
+
+def test_list_con_numeros_compartidos(datos_compartidos_modulo):
+    """Test que usa numeros compartidos del modulo"""
+    numeros_prueba = datos_compartidos_modulo["numeros_prueba"]
+    assert len(numeros_prueba) == 5
+
+
+def test_list_con_datos_inicializados(datos_inicializados):
+    """Test que usa datos ya inicializados debe estar vacias"""
+    assert len(datos_inicializados["elementos"]) == 0
+    datos_inicializados["elementos"].append(1)
+    datos_inicializados["elementos"].append(2)
+    datos_inicializados["elementos"].append(3)
+    assert len(datos_inicializados["elementos"]) == 3

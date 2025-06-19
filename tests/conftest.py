@@ -37,3 +37,28 @@ def workspace(entorno_temporal):
         yield directorio_temporal
     finally:
         os.chdir(directorio_proyecto)
+
+
+@pytest.fixture(scope="module")
+def datos_compartidos_modulo():
+    """
+    Datos compartidos para todos los tests en un modulo
+    """
+    datos = {
+        "cadenas_prueba": ["hola", "mundo", "python", "testing"],
+        "numeros_prueba": [1, 2, 3, 4, 5]
+    }
+    yield datos
+
+
+@pytest.fixture(scope="function")
+def datos_inicializados():
+    """
+    Datos inicializados para cada test individual
+    """
+    datos = {
+        "elementos": [],
+        "contador": 0,
+        "estado": "listo"
+    }
+    yield datos
