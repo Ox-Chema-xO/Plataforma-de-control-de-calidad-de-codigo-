@@ -8,7 +8,7 @@ for dir in src/ tests/; do
 done
 
 echo "Ejecutando pytest en tests/ con cobertura en src/"
-if ! pytest --maxfail=1 --disable-warnings -q --cov=src --cov-report=xml; then
+if ! pytest --maxfail=1 --disable-warnings -q --cov=src --cov-report=xml | tee pytest_results.log; then
     exit 1
 fi
 
@@ -17,4 +17,4 @@ if [ ! -f "coverage.xml" ]; then
     exit 1
 fi
 
-echo "Pruebas finalizadas correctamente con reporte de cobertura"
+echo "Pruebas finalizadas correctamente con reporte de cobertura y resultado"
