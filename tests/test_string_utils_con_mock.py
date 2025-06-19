@@ -17,11 +17,9 @@ class TestExtraerMetricasConMock:
         mock_match = Mock()
         mock_match.group.return_value = "15"
         mock_search.return_value = mock_match
-
         metricas = extraer_metricas_de_output("15 passed tests")
         assert metricas['tests_passed'] == 15
         assert mock_search.call_count >= 1
-
         calls = mock_search.call_args_list
         patron_calls = [call[0][0] for call in calls]
         assert any('passed' in patron for patron in patron_calls)
@@ -33,7 +31,6 @@ class TestParsearRutaConMock:
     @patch.object(os.path, 'basename')
     @patch.object(os.path, 'dirname')
     @patch.object(os.path, 'splitext')
-    @patch.object(os, 'sep', '\\')  # windows
     def test_parsear_ruta_windows(self, mock_splitext, mock_dirname,
                                   mock_basename, mock_normpath):
         mock_normpath.return_value = "src\\utils\\string_utils.py"
@@ -76,3 +73,43 @@ class TestProcesarSalidaHerramientaConMock:
                 assert resultado['estado'] == 'warning'
                 assert resultado['metricas'] == {'warnings': 5}
                 assert resultado['salida_limpia'] == "clean output"
+
+
+class TestConSkip:
+
+    @pytest.mark.skip(reason="Aun no se extrae metricas en formato xml")
+    def test_extraer_metricas_formato_xml(self):
+        xml_output = "<package name=utils line-rate=0.9709>"
+        resultado = extraer_metricas_de_output(xml_output)
+        assert resultado['coverage_percent'] == "97.09%"
+
+    @pytest.mark.skipif(
+        os.getenv('CI_ENVIRONMENT') != 'production',
+        reason="Solo se ejecuta en entorno de produccion"
+    )
+    def test_procesar_logs_produccion(self):
+        log_prod = "700 requests processed, 3 errors, 41.2 seconds"
+        resultado = extraer_metricas_de_output(log_prod)
+        assert resultado['errors'] == 3
+        assert resultado['duration'] == 41.2
+
+
+class TestConXFail:
+    @pytest.mark.xfail(reason="Aun no se parsean multiples rutas agrupadas")
+    def test_parsear_multiples_rutas_agrupadas(self):
+        rutas_proyecto = [
+            "src/utils/string_utils.py",
+            "src/utils/list_utils.py",
+            "tests/test_string_utils.py",
+            "tests/test_list_utils.py",
+            "iac/main.tf",
+            "iac/variables.tf"
+        ]
+        resultado = parsear_ruta_archivo(
+            rutas_proyecto,
+            criterios=['directorio_raiz', 'tipo_archivo', 'es_test']
+        )
+        assert 'src' in resultado
+        assert 'python' in resultado['src']
+        assert 'no_test' in resultado['src']['python']
+        assert len(resultado['src']['python']['no_test']) == 2
