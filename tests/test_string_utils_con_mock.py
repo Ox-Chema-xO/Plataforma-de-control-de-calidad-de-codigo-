@@ -2,8 +2,6 @@ import pytest
 from unittest.mock import patch, Mock, create_autospec
 import re
 import os
-import platform
-import sys
 from src.utils.string_utils import (
     extraer_metricas_de_output,
     parsear_ruta_archivo,
@@ -97,16 +95,16 @@ class TestConSkip:
 
 
 class TestConXFail:
-    @pytest.mark.xfail(reason="Aun no se parsean multiples rutas con agrupacion")
+    @pytest.mark.xfail(reason="Aun no se parsean multiples rutas agrupadas")
     def test_parsear_multiples_rutas_agrupadas(self):
         rutas_proyecto = [
             "src/utils/string_utils.py",
             "src/utils/list_utils.py",
-            "tests/test_string_utils.py", 
+            "tests/test_string_utils.py",
             "tests/test_list_utils.py",
             "iac/main.tf",
             "iac/variables.tf"
-        ]    
+        ]
         resultado = parsear_ruta_archivo(
             rutas_proyecto,
             criterios=['directorio_raiz', 'tipo_archivo', 'es_test']
