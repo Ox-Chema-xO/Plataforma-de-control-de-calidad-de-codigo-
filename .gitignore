@@ -9,3 +9,4 @@ badges/
 terraform.tfstate*
 *.tfvars
 .terraform.lock.hcl
+*.txt
