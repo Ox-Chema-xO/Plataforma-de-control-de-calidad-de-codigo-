@@ -1,5 +1,7 @@
 import pytest
 import src.utils.list_utils as list_utils
+from unittest.mock import patch
+import re
 
 
 def test_aplanar_lista_con_none():
@@ -36,3 +38,11 @@ def test_ordenar_por_criterio_lista_invalida():
     with pytest.raises(ValueError):
         list_utils.ordenar_por_criterio("test_unit", "test_integration",
                                         lambda t: t)
+
+
+def test_filtrar_por_patron_invalido():
+    with patch.object(re, 'compile') as mock_re_compile:
+        mock_re_compile.side_effect = re.error("Patron invalido")
+        archivos = ["main.tf", "variables.tf", "setup.sh"]
+        with pytest.raises(re.error):
+            list_utils.filtrar_por_patron(archivos, r"m[in")
