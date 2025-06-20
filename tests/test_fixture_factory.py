@@ -13,3 +13,13 @@ def test_metricas_factory(metricas_factory):
     assert metricas_normal["tests_passed"] > 0
     assert metricas_normal["duration"] > 0
     assert metricas_error["tests_failed"] > 0
+
+
+def test_proyecto_factory(proyecto_factory):
+    proyecto_py = proyecto_factory("trivia_game", "python")
+    proyecto_tf = proyecto_factory("infraestructura_local", "terraform")
+    assert len(proyecto_py.archivos_python) == 3
+    assert len(proyecto_py.archivos_tests) == len(proyecto_py.archivos_python)
+    assert "src/" in proyecto_py.estructura_directorios
+    assert "tests/" in proyecto_py.estructura_directorios
+    assert "iac/modules/" in proyecto_tf.estructura_directorios

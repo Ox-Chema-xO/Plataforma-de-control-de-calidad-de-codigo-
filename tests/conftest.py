@@ -4,6 +4,8 @@ import os
 import shutil
 import sys
 import random
+from dataclasses import dataclass, field
+from typing import Dict, List
 
 
 @pytest.fixture(scope="session")
@@ -117,3 +119,89 @@ def metricas_factory():
             metricas["errors"] = max(1, metricas["errors"])
         return metricas
     return _crear_metricas
+
+
+@dataclass
+class ProyectoConfg:
+    """
+    Configuracion basica para un proyecto de prueba
+    """
+    nombre: str
+    archivos_python: List[str] = field(default_factory=list)
+    archivos_terraform: List[str] = field(default_factory=list)
+    archivos_tests: List[str] = field(default_factory=list)
+    archivos_iac_tests: List[str] = field(default_factory=list)
+    estructura_directorios: Dict[str, List[str]] = field(default_factory=dict)
+
+
+@pytest.fixture
+def proyecto_factory(archivo_factory):
+    """
+    Se crea una estructura basica de proyecto con directorios,
+    archivos, test como src/, tests/, python, terraform
+    """
+    def _crear_proyecto(nombre="proyecto_plataforma_qa", tipo="completo"):
+        proyecto = ProyectoConfg(nombre=nombre)
+        if tipo == "python":
+            proyecto.archivos_python = [
+                archivo_factory(extension=".py", prefijo="main",
+                                es_test=False),
+                archivo_factory(extension=".py", prefijo="utils",
+                                es_test=False),
+                archivo_factory(extension=".py", prefijo="helpers",
+                                es_test=False)
+            ]
+            proyecto.archivos_tests = [
+                archivo_factory(extension=".py", prefijo="test",
+                                es_test=True)
+                for _ in range(len(proyecto.archivos_python))
+            ]
+            proyecto.estructura_directorios = {
+                "src/": proyecto.archivos_python,
+                "tests/": proyecto.archivos_tests,
+                "docs/": [archivo_factory(extension=".md", prefijo="README",
+                                          es_test=False)]
+            }
+
+        elif tipo == "terraform":
+            proyecto.archivos_terraform = [
+                archivo_factory(extension=".tf", prefijo="network",
+                                es_test=False),
+                archivo_factory(extension=".tf", prefijo="compute",
+                                es_test=False)
+            ]
+            proyecto.archivos_iac_tests = [
+                archivo_factory(extension=".py", prefijo="test",
+                                es_test=True)
+                for _ in range(len(proyecto.archivos_terraform))
+            ]
+            proyecto.estructura_directorios = {
+                "iac/modules/": proyecto.archivos_terraform,
+                "iac/environments/dev/": ["terraform.tfvars"],
+                "iac/environments/prod/": ["terraform.tfvars"]
+            }
+
+        elif tipo == "completo":
+            proyecto.archivos_python = [
+                archivo_factory(extension=".py", es_test=False)
+                for _ in range(3)
+            ]
+            proyecto.archivos_terraform = [
+                archivo_factory(extension=".tf", es_test=False)
+                for _ in range(2)
+            ]
+            proyecto.archivos_tests = [
+                archivo_factory(extension=".py", es_test=True)
+                for _ in range(4)
+            ]
+            proyecto.archivos_iac_tests = [
+                archivo_factory(extension=".py", es_test=True)
+            ]
+            proyecto.estructura_directorios = {
+                "src/": proyecto.archivos_python,
+                "iac/": proyecto.archivos_terraform,
+                "tests/": proyecto.archivos_tests,
+                "iac_tests/": proyecto.archivos_iac_tests
+            }
+        return proyecto
+    return _crear_proyecto
