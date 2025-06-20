@@ -189,3 +189,20 @@ class TestProcesarSalidaHerramienta:
         required_keys = ['herramienta', 'estado', 'metricas', 'salida_limpia']
         for key in required_keys:
             assert key in resultado, f"Falta la clave {key} en el resultado"
+
+
+def test_string_con_datos_compartidos(datos_compartidos_modulo):
+    """Test que usa datos compartidos del modulo"""
+    cadenas_prueba = datos_compartidos_modulo["cadenas_prueba"]
+    assert len(cadenas_prueba) == 4
+    assert "hola" in cadenas_prueba
+    assert "mundo" in cadenas_prueba
+    assert "python" in cadenas_prueba
+    assert "testing" in cadenas_prueba
+
+
+def test_string_con_datos_inicializados(datos_inicializados):
+    """Test que usa datos inicializados"""
+    datos_inicializados["elementos"].append("cadena_test")
+    assert len(datos_inicializados["elementos"]) == 1
+    assert datos_inicializados["estado"] == "listo"

@@ -279,7 +279,256 @@ Y el historial de commits durante todo el desarrollo del sprint 1 fue el siguien
 
 Durante el desarrollo del Sprint 1 cada desarrollador trabajo cada issue asignada en ramas diferentes en paralelo, al terminar todas las issues y tener todo los cambios en la rama develop, nace otra rama release desde develop en donde se agrega la documentacion correspondiente al sprint 1, asi aplicando correctamente las politicas de Git Flow
 
+## Sprint 2
+
+### Estructura del proyecto
+
+```
+Plataforma-de-control-de-calidad-de-codigo/
+│
+├── hooks/
+│   ├── commit-msg
+│   ├── pre-commit
+│   └── pre-push
+│
+├── iac/
+│   ├── __init__.py
+│   ├── main.tf
+│   └── variables.tf                    
+│
+├── iac_tests/
+│   ├── __init__.py
+│   ├── test_terraform_validation.py
+│   ├── test_iac_variables.py           
+│   └── test_iac_dummy.py               
+│
+├── scripts/
+│   ├── __init__.py
+│   ├── lint_qa.sh
+│   ├── run_tests.sh                    
+│   └── setup.sh
+│
+├── src/
+│   ├── helpers/
+│   │   ├── __init__.py
+│   │   ├── gestor_archivos.py
+│   │   └── gestor_directorios.py
+│   │
+│   ├── logs/
+│   │   ├── __init__.py
+│   │   └── registrador_logs.py
+│   │
+│   ├── reporting/
+│   │   ├── __init__.py
+│   │   └── reportador.py
+│   │
+│   └── utils/
+│       ├── __init__.py
+│       ├── list_utils.py
+│       └── string_utils.py
+│
+├── tests/
+│   ├── __init__.py
+│   ├── conftest.py                     
+│   ├── test_helpers.py
+│   ├── test_list_utils_exceptions.py
+│   ├── test_list_utils.py
+│   ├── test_logs.py
+│   ├── test_reportador.py
+│   ├── test_string_utils_con_mock.py
+│   ├── test_string_utils_exceptions.py
+│   ├── test_string_utils.py
+│   └── test_monkeypatch_simulation.py
+│
+├── .gitignore
+├── coverage.xml
+├── dashboard_ascii.py                  
+├── pytest_results.log                 
+├── README.md
+└── requirements.txt
+
+```
+
+### Pruebas unitarias
+
+#### Fixtures module y function
+
+Se expandio el sistema de testing con fixtures module y function implementados en `tests/conftest.py`:
+
+-   **Fixtures module**:  Se ejecutan una sola vez por archivo de test, proporcionando datos compartidos como `datos_compartidos_modulo` con strings y numeros que persisten durante todo el modulo para optimizar el rendimiento
+-   **Fixtures function**: Se ejecutan antes de cada test individual generando datos unicos como `datos_inicializados` con listas vacias, contadores y estados que se reinician para cada test, garantizando aislamiento completo entre pruebas
+
+Se agregaron tests adicionales para demostrar el uso de estos fixtures:
+
+-   **`test_string_utils.py`**: Agregados tests `test_string_con_datos_compartidos()` que utiliza datos compartidos del modulo para validar funciones de strings con configuracion persistente y `test_string_con_datos_inicializados()` que usa datos unicos por test para verificar comportamiento aislado
+-   **`test_list_utils.py`**: Implementados tests `test_list_con_numeros_compartidos()` que aprovecha numeros compartidos del modulo para validar operaciones con listas usando la configuracion global y `test_list_con_datos_inicializados()` que modifica datos unicos por test para comprobar que cada ejecucion inicia con estados limpios
+
+#### Simulacion con monkeypatch
+
+Se creo `test_monkeypatch_simulation.py` que utiliza la funcionalidad de monkeypatch de pytest para simular llamadas a funciones del sistema:
+
+-   **Simulacion de variables de entorno**: Tests que utilizan `monkeypatch.setenv()`, `monkeypatch.delenv()`, etc, para simular diferentes escenarios de configuracion
+-   **Simulacion de filesystem**: Uso de `monkeypatch.setattr()` para simular `os.listdir()` y `os.getcwd()`
+
+En total se crearon 8 test para simular llamadas a funciones del sistema en diferentes escenarios
+
+#### implementacion de patch.object y pytest.create_autospec en los test de utils/
+Se agregaron tests para usar tecnicas de mocking para probar metodos de `src/utils/`:
+
+-   **patch.object**: Reemplaza temporalmente metodos especificos de clases para simular diferentes comportamientos durante las pruebas
+-   **create_autospec**: Crea mocks que mantienen las firmas originales de los metodos evitando errores
+
+#### Tests con markers xfail y skip
+Se agregaron nuevos tests en `test_list_utils.py` y `test_string_utils_con_mock.py` que usan marcas especiales de pytest para manejar casos especificos:
+-   **@pytest.mark.xfail**: Para tests que sabemos que van a fallar por ahora. Esto nos permite documentar bugs conocidos sin que se detenga todo la ejecucion de los tests
+-   **@pytest.mark.skip**: Para tests que dependen de cosas externas como variables de entorno que tal vez no esten instalados en todas las maquinas
+
+Cada marca incluye mensajes descriptivos que explican el motivo del marcado, facilitando asi el mantenimiento y la comprension del codigo de pruebas
+
+### IAC
+
+#### Variables de Terraform
+Se creo `iac/variables.tf` con:
+
+-   3 variables definidas con tipos correctos
+-   Descripciones para cada variable
+-   Valores por defecto apropiados
+
+#### Provisioner local
+
+Se modifico `iac/main.tf` para incluir:
+
+-   Un recurso `null_resource` con provisioner local
+-   Creacion automatica del archivo `iac_dummy.txt`
+
+#### Tests de infraestructura
+
+Se implementaron dos nuevos scripts de testing de infraestructura:
+
+**`iac_tests/test_iac_variables.py`**:
+
+-   Valida que las variables en `variables.tf` tengan tipos correctos
+-   Verifica que las variables requeridas no esten vacías
+-   Utiliza la librería `hcl2` para parsear archivos Terraform
+
+**`iac_tests/test_iac_dummy.py`**:
+
+-   Ejecuta el ciclo completo de Terraform: `init`, `apply`, validacion y `destroy`
+-   Valida que el archivo `iac_dummy.txt` se cree correctamente
+-   Implementa limpieza automatica del estado de Terraform
+
+#### Mejora de run_tests.sh 
+
+Se mejoro `scripts/run_tests.sh` para incluir:
+
+-   **Integracion con Terraform**: Ejecucion de `terraform init` y `terraform apply -auto-approve`
+-   **Captura de errores**: El script falla si alguna prueba IAC no pasa
+-   **Generación de logs**: Guarda la salida de pytest en `pytest_results.log` para el dashboard
+
+Para ejecutar el bash script `run_tests.sh`:
+```bash
+# Ejemplo de ejecucion
+$ ./scripts/run_tests.sh
+# Ejecuta tests python + tests de infraestructura + genera logs
+```
+
+### Dashboard ASCII
+
+Se creo `dashboard_ascii.py` un script que proporciona visualizacion de resultados:
+
+-   **Lectura de cobertura**: Parsea `coverage.xml` y extrae el porcentaje de cobertura
+-   **Barra de progreso ASCII**: Genera barras visuales proporcionales usando caracteres `█` y `░`
+-   **Estadísticas de tests**: Lee `pytest_results.log` para mostrar tests pasados y fallidos
+
+Para ejecutar `dashboard_ascii.py` primero hay que ejecutar `run_tetst.sh` ya que esta genera el reporte de cobertura y el log de resultados de pytest, por lo que los pasos para ejecutar `dashboard_ascii.py` serian los siguientes:
+```bash
+# Generacion de reporte de cobertura y resultados de pytest
+$ ./scripts/run_tests.sh
+# Generacion del dashboard ascii
+$ python3 dashboard_ascii.py
+```
+La salida al ejecutar `dashboard_ascii.py` seria la siguiente:
+
+```
+==================================================
+  DASHBOARD ASCII - REPORTE DE COBERTURA
+==================================================
+
+COBERTURA DE CODIGO:
+   ███████████████████░ 98.4%
+   Estado: EXCELENTE
+
+RESULTADOS DE TESTS:
+   Total ejecutados: 141
+   Pasados: 141
+   Fallidos: 0
+   Estado: TODOS LOS TESTS PASARON
+
+==================================================
+```
+
+   <div align="center">
+      <img src="https://i.postimg.cc/3rnqc6qp/pc3-1.png" alt="image6" width="850" />
+   </div>
+
+Vemos que tiene un 98% de cobertura y tenemos 141 test en totales, de las cuales 141 pasan por lo que todos los test pasan correctamente
+
+### Flujo de trabajo
+
+Durante el Sprint 2 se distribuyeron las  issues entre los desarrolladores:
+
+   <div align="center">
+      <img src="https://i.postimg.cc/2jQ3P7kY/pc3-2.png" alt="image6" width="750" />
+   </div>
+
+Cada issue siguio el mismo flujo de trabajo del Sprint 1:
+
+1.  Asignacion y estimacion en el kanban board
+2.  Desarrollo en ramas feature especificas
+3.  Pull requests con revision de codigo
+4.  Integracion a develop tras aprobacion
+5.  Actualizacion de horas reales invertidas
+
+El kanban board comenzo con todas las issues en Sprint Backlog
+
+   <div align="center">
+      <img src="https://i.postimg.cc/Xv6DrWCt/pc3-3.png" alt="image6" width="1100" />
+   </div>
+
+Luego se fueron avanzando las issues hasta que las terminamos y llega a Review/QA para que los otros desarrolladores lo revisen y aprueben el PR
+
+   <div align="center">
+      <img src="https://i.postimg.cc/TPjNmsj1/pc3-4.png" alt="image6" width="1100" />
+   </div>
+
+   <div align="center">
+      <img src="https://i.postimg.cc/Dz9Jk28p/pc3-5.png" alt="image6" width="800" />
+   </div>
+
+   <div align="center">
+      <img src="https://i.postimg.cc/HLcchJs7/pc3-6.png" alt="image6" width="700" />
+   </div>
+
+Hasta que todas las issues son completas y veremos que todas las issues estan en Done
+
+   <div align="center">
+      <img src="https://i.postimg.cc/wvmt3jWJ/pc3-9.png" alt="image6" width="1100" />
+   </div>
+
+Al final quedariamos se crearon estas ramas para el Sprint 2:
+
+   <div align="center">
+      <img src="https://i.postimg.cc/52L8Kp5L/pc3-7.png" alt="image6" width="300" />
+   </div>
+
+y el historial de commits del Sprint 2 es el siguiente:
+
+   <div align="center">
+      <img src="https://i.postimg.cc/4xk9cVCd/pc3-8.png" alt="image6" width="1000" />
+   </div>
+
 ## Videos
 Se referencia el link de los video de cada cada Sprint hecho:
 
-- **Sprint 1**: https://unipe-my.sharepoint.com/:v:/g/personal/guido_chipana_c_uni_pe/EVUE_SK1IBZHuLs1czTY_pIBxpEpdmKeIMkNz2c_hSwtyA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=vZLDGc
+- **Sprint 1**: [link_video_script1](https://unipe-my.sharepoint.com/:v:/g/personal/guido_chipana_c_uni_pe/EVUE_SK1IBZHuLs1czTY_pIBxpEpdmKeIMkNz2c_hSwtyA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=vZLDGc)
+- **Sprint 2**: [link_video_script2](https://unipe-my.sharepoint.com/:v:/g/personal/guido_chipana_c_uni_pe/ERdZLDZgcxVIqACuqFMOVwoBvwF_G5Skoe0gLEESTT2VKQ?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=vsMIjv)

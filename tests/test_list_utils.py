@@ -1,5 +1,7 @@
 import pytest
 import src.utils.list_utils as list_utils
+import os
+import time
 
 
 def test_aplanar_lista_basica():
@@ -123,3 +125,61 @@ def test_ordenar_por_criterio_pruebas():
         {"nombre": "test_module_network", "tipo": "integration"},
     ]
     assert test_results_ordenadas == test_results_esperadas_ordenadas
+
+
+def test_list_con_numeros_compartidos(datos_compartidos_modulo):
+    """Test que usa numeros compartidos del modulo"""
+    numeros_prueba = datos_compartidos_modulo["numeros_prueba"]
+    assert len(numeros_prueba) == 5
+
+
+def test_list_con_datos_inicializados(datos_inicializados):
+    """Test que usa datos ya inicializados debe estar vacias"""
+    assert len(datos_inicializados["elementos"]) == 0
+    datos_inicializados["elementos"].append(1)
+    datos_inicializados["elementos"].append(2)
+    datos_inicializados["elementos"].append(3)
+    assert len(datos_inicializados["elementos"]) == 3
+
+
+@pytest.mark.skipif(
+    os.getenv('PERFORMANCE_TESTS') != 'enabled',
+    reason="Por el momento tests de rendimiento deshabilitados"
+)
+def test_rendimiento_filtrar_patron_grandes():
+    archivos_grandes = [f"archivo_{i}.py" for i in range(100000)]
+    archivos_grandes.extend([f"test_{i}.py" for i in range(50000)])
+    inicio = time.perf_counter()
+    resultado = list_utils.filtrar_por_patron(archivos_grandes, r"^test_")
+    duracion = time.perf_counter() - inicio
+    assert len(resultado) == 50000
+    assert duracion < 5.5
+
+
+@pytest.mark.xfail(reason="Aun no se agrupa archivos por varios criterios")
+def test_agrupar_por_multiples_criterios(self):
+    archivos = [
+        "src/list_utils.py",
+        "iac/main.tf",
+        "src/logs/registrador_logs.py",
+        "tests/test_list_utils.py"
+    ]
+
+    resultado = list_utils.agrupar_por_extension(
+        archivos,
+        criterios=['directorio', 'extension']
+    )
+
+    assert 'src' in resultado
+    assert '.py' in resultado['src']
+    assert "src/list_utils.py" in resultado['src']['.py']
+    assert "src/logs/registrador_logs.py" in resultado['src']['.py']
+    assert len(resultado['src']['.py']) == 2
+
+    assert 'iac' in resultado
+    assert '.tf' in resultado['iac']
+    assert "iac/main.tf" in resultado['iac']['.tf']
+
+    assert 'tests' in resultado
+    assert '.py' in resultado['tests']
+    assert "tests/test_list_utils.py" in resultado['tests']['.py']
