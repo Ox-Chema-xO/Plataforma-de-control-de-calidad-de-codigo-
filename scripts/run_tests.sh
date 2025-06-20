@@ -33,6 +33,8 @@ capturar_error $? "terraform init"
 echo "Ejecutando terraform apply en iac/"
 terraform apply -auto-approve -no-color | tee ../terraform_apply.log
 capturar_error $? "terraform apply"
+echo "Ejecutando terraform destroy"
+terraform destroy -auto-approve -no-color
 cd ..
 
 echo "Ejecutando pytest en iac_tests/"
