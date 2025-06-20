@@ -26,7 +26,7 @@ if [ ! -f "coverage.xml" ]; then
 fi
 
 echo "Ejecutando terraform init en iac/"
-cd iac/ || capture_error $? "cd iac/"
+cd iac/ || capturar_error $? "cd iac/"
 terraform init
 capturar_error $? "terraform init"
 
