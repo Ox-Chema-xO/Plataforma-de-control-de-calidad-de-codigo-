@@ -530,4 +530,5 @@ y el historial de commits del Sprint 2 es el siguiente:
 ## Videos
 Se referencia el link de los video de cada cada Sprint hecho:
 
-- **Sprint 1**: https://unipe-my.sharepoint.com/:v:/g/personal/guido_chipana_c_uni_pe/EVUE_SK1IBZHuLs1czTY_pIBxpEpdmKeIMkNz2c_hSwtyA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=vZLDGc
+- **Sprint 1**: [link_video_script1](https://unipe-my.sharepoint.com/:v:/g/personal/guido_chipana_c_uni_pe/EVUE_SK1IBZHuLs1czTY_pIBxpEpdmKeIMkNz2c_hSwtyA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=vZLDGc)
+- **Sprint 2**: [link_video_script2](https://unipe-my.sharepoint.com/:v:/g/personal/guido_chipana_c_uni_pe/ERdZLDZgcxVIqACuqFMOVwoBvwF_G5Skoe0gLEESTT2VKQ?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=vsMIjv)
