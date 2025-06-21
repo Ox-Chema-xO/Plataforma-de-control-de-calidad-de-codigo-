@@ -11,3 +11,4 @@ terraform.tfstate*
 .terraform.lock.hcl
 *.txt
 *.log
+.hypothesis/
